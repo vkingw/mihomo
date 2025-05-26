@@ -8,13 +8,14 @@ import (
 	"time"
 
 	"github.com/metacubex/mihomo/component/resolver"
+	C "github.com/metacubex/mihomo/constant"
 	"github.com/metacubex/mihomo/listener/sing"
 	"github.com/metacubex/mihomo/log"
 
-	"github.com/sagernet/sing/common/buf"
-	"github.com/sagernet/sing/common/bufio"
-	M "github.com/sagernet/sing/common/metadata"
-	"github.com/sagernet/sing/common/network"
+	"github.com/metacubex/sing/common/buf"
+	"github.com/metacubex/sing/common/bufio"
+	M "github.com/metacubex/sing/common/metadata"
+	"github.com/metacubex/sing/common/network"
 )
 
 type ListenerHandler struct {
@@ -123,4 +124,10 @@ func (h *ListenerHandler) NewPacketConnection(ctx context.Context, conn network.
 		return nil
 	}
 	return h.ListenerHandler.NewPacketConnection(ctx, conn, metadata)
+}
+
+func (h *ListenerHandler) TypeMutation(typ C.Type) *ListenerHandler {
+	handle := *h
+	handle.ListenerHandler = h.ListenerHandler.TypeMutation(typ)
+	return &handle
 }
